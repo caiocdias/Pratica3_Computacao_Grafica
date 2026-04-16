@@ -1,24 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/glut.h>
+#include <time.h>
 
-/*
- * Prática 3 - Computação Gráfica
- * Teclas:
- *   r / R -> rotaciona 180 graus
- *   s / S -> aumenta a escala em 50%
- *   t / T -> translada para um novo ponto na tela
- *   o / O -> restaura a imagem original
- *   ESC   -> sai
- */
 
-GLfloat tx = 0.0f, ty = 0.0f;   /* centro original do triângulo */
-GLfloat d  = 0.25f;             /* metade da base / deslocamento */
+GLfloat tx = 0.0f, ty = 0.0f;
+GLfloat d  = 0.25f;
 
 GLfloat angulo = 0.0f;
 GLfloat escala = 1.0f;
 GLfloat deslocX = 0.0f;
 GLfloat deslocY = 0.0f;
+
+float randomFloat(float min, float max) {
+    return min + ((float)rand() / (float)RAND_MAX) * (max - min);
+}
 
 void desenhaTriangulo(void) {
     glBegin(GL_TRIANGLES);
@@ -53,7 +49,7 @@ void teclado(unsigned char key, int x, int y) {
     (void)y;
 
     switch (key) {
-        case 27: /* ESC */
+        case 27:
             exit(0);
             break;
 
@@ -68,11 +64,17 @@ void teclado(unsigned char key, int x, int y) {
             break;
 
         case 't':
-        case 'T':
-            /* novo ponto escolhido na tela */
-            deslocX = 0.5f;
-            deslocY = 0.5f;
+        case 'T': {
+            float limite = 1.0f - (d * escala);
+
+            if (limite < 0.0f) {
+                limite = 0.0f;
+            }
+
+            deslocX = randomFloat(-limite, limite);
+            deslocY = randomFloat(-limite, limite);
             break;
+        }
 
         case 'o':
         case 'O':
@@ -98,6 +100,7 @@ void inicializa(void) {
 }
 
 int main(int argc, char** argv) {
+    srand((unsigned int)time(NULL));
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(700, 700);
