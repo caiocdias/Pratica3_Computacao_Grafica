@@ -64,8 +64,9 @@ void teclado(unsigned char key, int x, int y) {
             break;
 
         case 't':
-        case 'T': {
-            float limite = 1.0f - (d * escala);
+        case 'T':
+            float limite;
+            limite = 1.0f - (d * escala);
 
             if (limite < 0.0f) {
                 limite = 0.0f;
@@ -74,7 +75,7 @@ void teclado(unsigned char key, int x, int y) {
             deslocX = randomFloat(-limite, limite);
             deslocY = randomFloat(-limite, limite);
             break;
-        }
+
 
         case 'o':
         case 'O':
